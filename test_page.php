@@ -12,7 +12,7 @@ if(isset($_GET['captcha'])){
 	<title>Check shitcode</title>
 	<style>
 		/*One shitcodes one love*/
-	form{
+	body{
 		text-align:center;
 	}form input[type="textarea"]{
 		width:220px;
@@ -20,12 +20,20 @@ if(isset($_GET['captcha'])){
 		border:2px groove aqua;
 	}
 	</style>
+	<script>
+	function changeCaptcha(){
+		var captcha = document.getElementById("captcha");
+		captcha.src="test_get.php";
+	}
+	</script>
 </head>
 <body>
 <form action="test_page.php" method=GET>
-<img src="test_get.php" alt="captcha"><br>
+<img id=captcha src="test_get.php" alt="captcha"><br>
 <input type="textarea" name=captcha placeholder="Write what you see on picture."><br>
 <input type=submit value=check>
 </form>
+<button onclick=changeCaptcha()>unreadable</button>
+
 </body>
 </html>

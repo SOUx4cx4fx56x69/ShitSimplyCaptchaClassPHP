@@ -44,7 +44,30 @@ class Simply_Captcha_Render{
 	 }
 	 	return $string;
 	}
-	
+	protected function randomPixels($mincount=100,$maxcount=500){
+	  $color = $this->getRandomColor();
+	  $color = imagecolorresolvealpha($this->im,$color['red'],$color['green'],$color['blue'],10);
+	  for($i = rand($mincount,$maxcount);$i--;){
+		 $tmpx=rand(0,$this->width) % $this->width;
+		 $tmpy=rand(0,$this->height) % $this->width;
+		 imagesetpixel($this->im, $tmpx,$tmpy, $color); 
+	  }
+	  
+	  
+	}
+	protected function blur(){
+		imagefilter($this->im, IMG_FILTER_GAUSSIAN_BLUR);
+	}
+	protected function lines($countCurwes=5){
+		//shitcode lines
+	  $color = $this->getRandomColor();
+	  $color = imagecolorresolvealpha($this->im,$color['red'],$color['green'],$color['blue'],20);
+	  while($countCurwes--){
+	  $sx=rand(0,$this->width*2) % $this->width;
+	  $sy=rand(0,$this->height*2) % $this->width;
+	  imageline($this->im, $sx, $sy, $this->width, $this->height,$color);
+      }
+	} 
 	public function getim(){
 	 return $this->im;	
 	}
@@ -70,6 +93,9 @@ class Simply_Captcha extends Simply_Captcha_Render{
      	session_start();
 		$this->initImage($width,$height);
 		$string = $this->initRandString();
+		$this->lines();
+		$this->randomPixels();
+		$this->blur();
 		$_SESSION[$nameofsession] = hash($algo,$string);
 		$this->rendImage();
 	}
